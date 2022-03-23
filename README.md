@@ -5,7 +5,7 @@ The JMapping is JSON-based language that allows expressing translation rules (ma
 
 ```json
 {
-  "source": "",
+  "source": "https://github.com/helio-ecosystem/helio-processor-jmapping/releases/download/v0.2.0/helio-processor-jmapping-0.2.0.jar",
   "class": "helio.jmapping.processor.JMappingProcessor",
   "type": "PROCESSOR"
 }
@@ -15,7 +15,7 @@ In addition, in order to properly function and for allowing the usage of some fu
 
 ```json
 {
-  "source": "",
+  "source": "https://github.com/helio-ecosystem/helio-processor-jmapping/releases/download/v0.2.0/helio-processor-jmapping-0.2.0.jar",
   "class": "helio.jmapping.functions.HF",
   "type": "FUNCTION"
 }
