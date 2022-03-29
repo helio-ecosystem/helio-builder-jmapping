@@ -12,15 +12,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import helio.blueprints.components.MappingProcessor;
+import helio.blueprints.components.TranslationUnit;
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncompatibleMappingException;
 import helio.blueprints.exceptions.IncorrectMappingException;
 import helio.blueprints.exceptions.MappingExecutionException;
-import helio.blueprints.mappings.Datasource;
-import helio.blueprints.mappings.TripleMapping;
+import helio.jmapping.Datasource;
 import helio.jmapping.Expresions;
 import helio.jmapping.JMapping;
 import helio.jmapping.TranslationRules;
+import helio.jmapping.TripleMapping;
 
 public class JMappingProcessor implements MappingProcessor {
 
@@ -31,24 +32,25 @@ public class JMappingProcessor implements MappingProcessor {
 			  .create();
 	
 	@Override
-	public Set<TripleMapping> parseMapping(String content) throws IncompatibleMappingException, MappingExecutionException {
-		Set<TripleMapping> tripleMapping = new HashSet<>();
+	public Set<TranslationUnit> parseMapping(String content) throws IncompatibleMappingException, MappingExecutionException {
+		Set<TranslationUnit> units = new HashSet<>();
 		JMapping jsonMapping = findMappingReader(content);
 		
 		
 		if(jsonMapping != null) {
 			try {
 			Set<JMapping> subMappings = groupMappings(jsonMapping);
-			subMappings.parallelStream()
+			units = subMappings.parallelStream()
 				.map(jMap -> toTripleMapping(jMap))
-				.forEach(tMap -> tripleMapping.add(tMap));
+				.map(tMap -> new TranslationUnitAlfa(tMap))
+				.collect(Collectors.toSet());
 			}catch(Exception e) {
 				e.printStackTrace();
 				throw new MappingExecutionException(e.toString());
 			}
 			
 		}
-		return tripleMapping;
+		return units;
 	}
 	
 	private JMapping findMappingReader(String content) throws IncompatibleMappingException {

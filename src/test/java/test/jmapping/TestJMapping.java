@@ -13,12 +13,13 @@ import com.google.gson.Gson;
 
 import helio.blueprints.ComponentType;
 import helio.blueprints.Components;
+import helio.blueprints.components.TranslationUnit;
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncompatibleMappingException;
 import helio.blueprints.exceptions.MappingExecutionException;
-import helio.blueprints.mappings.TripleMapping;
-import helio.blueprints.mappings.VelocityEvaluator;
+import helio.jmapping.TripleMapping;
 import helio.jmapping.processor.JMappingProcessor;
+import helio.jmapping.processor.VelocityEvaluator;
 
 public class TestJMapping {
 
@@ -74,12 +75,8 @@ public class TestJMapping {
 		String jsonPayload = "{\"$.value.id\":[\"2\"],\"$.value.joke\":[\"hi hi\"],\"$.value.categories.*\":[\"1\",\"2\"]}";
 		JMappingProcessor processor = new JMappingProcessor();
 		
-		Set<TripleMapping> tMaps = processor.parseMapping(mapping1);
+		Set<TranslationUnit> tMaps = processor.parseMapping(mapping1);
 		System.out.println(tMaps.size());
-		tMaps.forEach(tMap -> System.out.println(tMap.getTemplate()));
-		VelocityEvaluator.registerVelocityTemplate("temp1", tMaps.iterator().next().getTemplate());
-		StringWriter r = VelocityEvaluator.evaluateTemplate("temp1", toMatrix(jsonPayload));
-		System.out.println(r.toString());
 		Assert.assertTrue(tMaps.size() > 0);
 	}
 	

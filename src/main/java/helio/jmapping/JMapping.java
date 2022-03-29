@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
 
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncorrectMappingException;
-import helio.blueprints.mappings.Datasource;
 import helio.jmapping.processor.JMappingProcessor;
 
 /**

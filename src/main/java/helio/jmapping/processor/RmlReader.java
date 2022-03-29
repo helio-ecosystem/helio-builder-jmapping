@@ -28,9 +28,6 @@ import com.google.gson.JsonObject;
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncompatibleMappingException;
 import helio.blueprints.exceptions.IncorrectMappingException;
-import helio.blueprints.mappings.Datasource;
-import helio.jmapping.JMapping;
-import helio.jmapping.LinkRule;
 import helio.jmapping.*;
 
 
