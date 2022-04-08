@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import helio.blueprints.components.MappingFunctions;
+import helio.blueprints.MappingFunctions;
 
 public class HF implements MappingFunctions {
 

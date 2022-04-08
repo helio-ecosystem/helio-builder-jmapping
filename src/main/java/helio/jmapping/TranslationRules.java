@@ -45,7 +45,7 @@ public class TranslationRules {
 	 * This method confirms if a {@link Datasource} is binded to this {@link TranslationRules}
 	 * @param dataSource the if of the {@link Datasource}
 	 * @return true if the {@link Datasource} is binded to the {@link TranslationRules}
-	 * @throws IncorrectMappingException 
+	 * @throws IncorrectMappingException
 	 */
 	public Boolean hasDataSource(String dataSource) throws IncorrectMappingException {
 		if(this.datasource==null)
@@ -102,7 +102,7 @@ public class TranslationRules {
 	}
 
 	/**
-	 * Gets the {@link Datasource} id binded to this {@link TranslationRule} 
+	 * Gets the {@link Datasource} id binded to this {@link TranslationRule}
 	 * @return a {@link Datasource} id
 	 */
 	public String getDatasourceId() {

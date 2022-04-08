@@ -4,14 +4,14 @@ import java.util.Objects;
 import java.util.Set;
 
 public class TripleMapping {
-	
+
 	protected Datasource datasource;
 	protected String template;
 	protected Set<String> dataReferences; // me las dan a mano, se extraen automaticamente de la plantilla, o en la plantilla se llama al datasource en cuestion
-	
-	
+
+
 	public TripleMapping() {
-		
+
 	}
 
 	public TripleMapping(Datasource datasource2, String template, Set<String> dataReferences) {
@@ -22,7 +22,7 @@ public class TripleMapping {
 	}
 
 
-	
+
 
 	public Datasource getDatasource() {
 		return datasource;
@@ -57,15 +57,13 @@ public class TripleMapping {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if ((obj == null) || (getClass() != obj.getClass()))
 			return false;
 		TripleMapping other = (TripleMapping) obj;
 		return Objects.equals(dataReferences, other.dataReferences) && Objects.equals(datasource, other.datasource)
 				&& Objects.equals(template, other.template);
 	}
-	
 
-	
+
+
 }

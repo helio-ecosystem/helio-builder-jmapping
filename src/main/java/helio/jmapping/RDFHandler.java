@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 
-import helio.blueprints.components.DataHandler;
+import helio.blueprints.DataHandler;
 
 
 /**

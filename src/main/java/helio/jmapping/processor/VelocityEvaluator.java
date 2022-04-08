@@ -10,7 +10,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
-import helio.blueprints.Components;
+import helio.blueprints.components.Components;
 
 
 
@@ -19,7 +19,7 @@ public class VelocityEvaluator {
 	// -- Attributes
 	protected static final org.apache.velocity.app.VelocityEngine velocityEngine;
 	protected static final StringResourceRepository templateRepository;
-	
+
 	static {
 		velocityEngine = new org.apache.velocity.app.VelocityEngine();
 		velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "string");
@@ -31,7 +31,7 @@ public class VelocityEvaluator {
 			e.printStackTrace();
 		}
 		templateRepository = (StringResourceRepository) velocityEngine.getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT);
-		
+
 	}
 
 

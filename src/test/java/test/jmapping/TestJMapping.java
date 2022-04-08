@@ -11,13 +11,12 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
-import helio.blueprints.ComponentType;
-import helio.blueprints.Components;
-import helio.blueprints.components.TranslationUnit;
+import helio.blueprints.TranslationUnit;
+import helio.blueprints.components.ComponentType;
+import helio.blueprints.components.Components;
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncompatibleMappingException;
-import helio.blueprints.exceptions.MappingExecutionException;
-import helio.jmapping.TripleMapping;
+import helio.blueprints.exceptions.TranslationUnitExecutionException;
 import helio.jmapping.processor.JMappingProcessor;
 import helio.jmapping.processor.VelocityEvaluator;
 
@@ -40,7 +39,7 @@ public class TestJMapping {
 			e.printStackTrace();
 		}
 		try {
-			Components.registerAndLoad("https://github.com/helio-ecosystem/helio-provider-url/releases/download/v0.0.1/helio-provider-url-0.0.1.jar", "provider.URLProvider", ComponentType.PROVIDER); 
+			Components.registerAndLoad("https://github.com/helio-ecosystem/helio-provider-url/releases/download/v0.0.1/helio-provider-url-0.0.1.jar", "provider.URLProvider", ComponentType.PROVIDER);
 		} catch (ExtensionNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -54,7 +53,7 @@ public class TestJMapping {
 		} catch (ExtensionNotFoundException e) {
 			e.printStackTrace();
 		}
-	
+
 		try {
 			Components.registerAndLoad("https://github.com/helio-ecosystem/helio-provider-file/releases/download/v.0.0.1/helio-provider-file-0.0.1.jar",  "providers.FileProvider", ComponentType.PROVIDER);
 		}catch(Exception e) {
@@ -67,22 +66,22 @@ public class TestJMapping {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	@Test
-	public void test01() throws IncompatibleMappingException, MappingExecutionException {
+	public void test01() throws IncompatibleMappingException, TranslationUnitExecutionException {
 		String mapping1 = "{\"datasources\":[{\"id\":\"OccupantBehavior Datasource\",\"refresh\":\"1000\",\"handler\":{\"type\":\"JsonHandler\",\"iterator\":\"$\"},\"provider\":{\"type\":\"URLProvider\",\"url\":\"http://api.icndb.com/jokes/random?firstName=John&lastName=Doe\"}}],\"resource_rules\":[{\"id\":\"Building sync\",\"datasource\":\"OccupantBehavior Datasource\",\"subject\":\"https://www.data.bimerr.occupancy.es/resource/sync/{$.value.id}\",\"properties\":[{\"predicate\":\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\",\"object\":\"https://bimerr.iot.linkeddata.es/def/building#Building\",\"is_literal\":\"False\"},{\"predicate\":\"https://bimerr.iot.linkeddata.es/def/building#description\",\"object\":\"{$.value.joke}\",\"is_literal\":\"True\",\"datatype\":\"http://www.w3.org/2001/XMLSchema#string\"},{\"predicate\":\"https://w3id.org/def/saref4bldg#hasSpace\",\"object\":\"https://www.data.bimerr.occupancy.es/resource/{$.value.categories.*}\",\"is_literal\":\"False\"}]}]}";
 		String jsonPayload = "{\"$.value.id\":[\"2\"],\"$.value.joke\":[\"hi hi\"],\"$.value.categories.*\":[\"1\",\"2\"]}";
 		JMappingProcessor processor = new JMappingProcessor();
-		
+
 		Set<TranslationUnit> tMaps = processor.parseMapping(mapping1);
 		System.out.println(tMaps.size());
 		Assert.assertTrue(tMaps.size() > 0);
 	}
-	
-	
+
+
 	@Test
-	public void test02() throws IncompatibleMappingException, MappingExecutionException {
+	public void test02() throws IncompatibleMappingException, TranslationUnitExecutionException {
 		String jsonPayload = "{\"$.value.id\":[\"2\"],\"$.value.joke\":[\"hi hi\"],\"$.value.categories.*\":[\"1\",\"2\"]}";
 		VelocityEvaluator.registerVelocityTemplate("temp1", "#set( $directoryRoot = $ref.get('$.value.id') )"
 				+ "$directoryRoot");
@@ -90,8 +89,8 @@ public class TestJMapping {
 		System.out.println(">"+r.toString());
 		Assert.assertTrue(true);
 	}
-	
-	
+
+
 	private static Map<String, List<String>> toMatrix(String jsonPayload) {
 		Map<String, List<String>> simplifiedMatrix = (new Gson()).fromJson(jsonPayload, new HashMap<String, List<String>>().getClass());
 		return simplifiedMatrix;

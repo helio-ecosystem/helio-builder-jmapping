@@ -2,6 +2,7 @@ package helio.jmapping;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,7 +17,7 @@ import helio.jmapping.processor.JMappingProcessor;
  *
  */
 public class JMapping  {
-		
+
 	@Expose
 	@SerializedName(value = "datasources")
 	private List<Datasource> datasources;
@@ -93,11 +94,11 @@ public class JMapping  {
 	public void setLinkRules(List<LinkRule> linkRules) {
 		this.linkRules = linkRules;
 	}
-	
+
 	/**
 	 * This method checks that the mapping is correct and valid
 	 * @throws IncorrectMappingException
-	 * @throws ExtensionNotFoundException 
+	 * @throws ExtensionNotFoundException
 	 */
 	public void checkMapping() throws IncorrectMappingException, ExtensionNotFoundException {
 		if(this.datasources.isEmpty() && this.translationRules.isEmpty() && this.linkRules.isEmpty())
@@ -148,13 +149,13 @@ public class JMapping  {
 		return true;
 	}
 
-	
-	
+
+
 	public String toJson() {
 		return JMappingProcessor.GSON.toJson(this);
 	}
 
-	
+
 
 }
 

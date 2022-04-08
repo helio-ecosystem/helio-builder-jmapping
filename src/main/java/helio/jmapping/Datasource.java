@@ -6,9 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import helio.blueprints.Components;
-import helio.blueprints.components.DataHandler;
-import helio.blueprints.components.DataProvider;
+import helio.blueprints.DataHandler;
+import helio.blueprints.DataProvider;
+import helio.blueprints.components.Components;
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncorrectMappingException;
 
@@ -45,7 +45,7 @@ public class Datasource {
 	@Expose
 	@SerializedName(value = "provider")
 	private JsonObject providerConfiguration;
-	
+
 	@Expose
 	private Integer refresh;
 
@@ -95,8 +95,8 @@ public class Datasource {
 	 * Gets the {@link DataHandler}
 	 *
 	 * @return the {@link DataHandler}
-	 * @throws IncorrectMappingException 
-	 * @throws ExtensionNotFoundException 
+	 * @throws IncorrectMappingException
+	 * @throws ExtensionNotFoundException
 	 */
 	public DataHandler getDataHandler() throws IncorrectMappingException, ExtensionNotFoundException {
 		packHandler(handlerConfiguration);
@@ -116,8 +116,8 @@ public class Datasource {
 	 * Gets the {@link DataProvider}
 	 *
 	 * @return the {@link DataProvider}
-	 * @throws IncorrectMappingException 
-	 * @throws ExtensionNotFoundException 
+	 * @throws IncorrectMappingException
+	 * @throws ExtensionNotFoundException
 	 */
 	public DataProvider getDataProvider() throws IncorrectMappingException, ExtensionNotFoundException {
 		packProvider(providerConfiguration);
@@ -165,8 +165,8 @@ public class Datasource {
 	 * Sets a new {@link JsonObject} configuration for the {@link DataHandler}
 	 *
 	 * @param handlerConfiguration a new {@link JsonObject} configuration
-	 * @throws IncorrectMappingException 
-	 * @throws ExtensionNotFoundException 
+	 * @throws IncorrectMappingException
+	 * @throws ExtensionNotFoundException
 	 */
 	public void setHandlerConfiguration(JsonObject handlerConfiguration) throws IncorrectMappingException, ExtensionNotFoundException {
 		packHandler(handlerConfiguration);
@@ -205,8 +205,8 @@ public class Datasource {
 	 * Sets a new {@link JsonObject} configuration for the {@link DataProvider}
 	 *
 	 * @param providerConfiguration a new {@link JsonObject} configuration
-	 * @throws IncorrectMappingException 
-	 * @throws ExtensionNotFoundException 
+	 * @throws IncorrectMappingException
+	 * @throws ExtensionNotFoundException
 	 */
 	public void setProviderConfiguration(JsonObject providerConfiguration) throws IncorrectMappingException, ExtensionNotFoundException {
 		packProvider(providerConfiguration);

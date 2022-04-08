@@ -10,33 +10,33 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
-import helio.blueprints.components.MappingProcessor;
-import helio.blueprints.components.TranslationUnit;
+import helio.blueprints.UnitBuilder;
+import helio.blueprints.TranslationUnit;
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncompatibleMappingException;
 import helio.blueprints.exceptions.IncorrectMappingException;
-import helio.blueprints.exceptions.MappingExecutionException;
+import helio.blueprints.exceptions.TranslationUnitExecutionException;
 import helio.jmapping.Datasource;
 import helio.jmapping.Expresions;
 import helio.jmapping.JMapping;
 import helio.jmapping.TranslationRules;
 import helio.jmapping.TripleMapping;
 
-public class JMappingProcessor implements MappingProcessor {
+public class JMappingProcessor implements UnitBuilder {
 
 	public static Logger logger = LoggerFactory.getLogger(JMappingProcessor.class);
 
 	public static final Gson GSON = new GsonBuilder()
 			  .excludeFieldsWithoutExposeAnnotation()
 			  .create();
-	
+
 	@Override
-	public Set<TranslationUnit> parseMapping(String content) throws IncompatibleMappingException, MappingExecutionException {
+	public Set<TranslationUnit> parseMapping(String content) throws IncompatibleMappingException, TranslationUnitExecutionException {
 		Set<TranslationUnit> units = new HashSet<>();
 		JMapping jsonMapping = findMappingReader(content);
-		
-		
+
 		if(jsonMapping != null) {
 			try {
 			Set<JMapping> subMappings = groupMappings(jsonMapping);
@@ -46,13 +46,13 @@ public class JMappingProcessor implements MappingProcessor {
 				.collect(Collectors.toSet());
 			}catch(Exception e) {
 				e.printStackTrace();
-				throw new MappingExecutionException(e.toString());
+				throw new TranslationUnitExecutionException(e.toString());
 			}
-			
+
 		}
 		return units;
 	}
-	
+
 	private JMapping findMappingReader(String content) throws IncompatibleMappingException {
 		JMapping jsonMapping = null;
 		StringBuilder errors = new StringBuilder();
@@ -72,14 +72,14 @@ public class JMappingProcessor implements MappingProcessor {
 		}
 		return jsonMapping;
 	}
-	
+
 	private TripleMapping toTripleMapping(JMapping unitaryMapping) {
 		TranslationRules rules = unitaryMapping.getTranslationRules().get(0);
-		String template = VelocityMapperToNT.toVelocityTemplate(rules);	
+		String template = VelocityMapperToNT.toVelocityTemplate(rules);
 		Set<String> dataReferences = Expresions.extractDataReferences(rules).parallelStream().collect(Collectors.toSet());
 		return new TripleMapping(unitaryMapping.getDatasources().get(0), template, dataReferences);
 	}
-	
+
 	private Set<JMapping> groupMappings(JMapping mapping) throws IncorrectMappingException, ExtensionNotFoundException {
 		Set<JMapping> subMappings = new HashSet<>();
 		mapping.checkMapping();
@@ -101,5 +101,11 @@ public class JMappingProcessor implements MappingProcessor {
 			}
 		}
 		return subMappings;
+	}
+
+	@Override
+	public void configure(JsonObject configuration) {
+		// TODO Auto-generated method stub
+
 	}
 }
