@@ -18,16 +18,21 @@ import io.reactivex.rxjava3.core.FlowableEmitter;
 
 public class FileWatcherProvider implements AsyncDataProvider {//, Consumer<Emitter<String>> {
 
-
+	private File file;
+	
 	@Override
 	public void configure(JsonObject configuration) {
-		// TODO Auto-generated method stub
+		if(configuration.has("file")) {
+			this.file = new File(configuration.get("file").toString());
+		}else {
+			throw new IllegalArgumentException("Provide a json configuration with \"file\" key");
+		}
 
 	}
 
 	@Override
 	public void subscribe(@NonNull FlowableEmitter<@NonNull String> emitter) throws Throwable {
-		final Path path = FileSystems.getDefault().getPath("./");
+		final Path path = FileSystems.getDefault().getPath(file.getPath());
 		try (final WatchService watchService = FileSystems.getDefault().newWatchService()) {
 			final WatchKey watchKey = path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
 			while (true) {

@@ -8,7 +8,7 @@
       },
       "provider": {
         "type": "FileProvider",
-        "file": "./src/test/resources/git-issues/issue07/data-issue7.json"
+        "file": "/Users/andreacimmino/Desktop/Lab/json-mapping/src/test/resources/git-issues/issue07/data-issue7.json"
       }
     }
   ],

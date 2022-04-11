@@ -25,7 +25,7 @@ import helio.jmapping.TranslationRules;
 import helio.jmapping.TripleMapping;
 
 public class JMappingProcessor implements UnitBuilder {
-
+	
 	public static Logger logger = LoggerFactory.getLogger(JMappingProcessor.class);
 
 	public static final Gson GSON = new GsonBuilder()
@@ -42,7 +42,7 @@ public class JMappingProcessor implements UnitBuilder {
 			Set<JMapping> subMappings = groupMappings(jsonMapping);
 			units = subMappings.parallelStream()
 				.map(jMap -> toTripleMapping(jMap))
-				.map(tMap -> new TranslationUnitAlfa(tMap))
+				.map(tMap -> new MemoryFlowUnit(tMap))
 				.collect(Collectors.toSet());
 			}catch(Exception e) {
 				e.printStackTrace();

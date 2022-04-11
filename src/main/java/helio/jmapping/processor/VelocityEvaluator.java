@@ -11,6 +11,7 @@ import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
 import helio.blueprints.components.Components;
+import helio.jmapping.functions.HF;
 
 
 
@@ -68,10 +69,10 @@ public class VelocityEvaluator {
 
 	public static StringWriter evaluateTemplate(String templateId, Map<String, List<String>> dataReferences)  {
 		VelocityContext context = new VelocityContext();
-		context.put("ref", context); // <-- TADA
+		context.put("HF", new HF());
+		context.put("ref", context); // 
 		// Load functions
-		Components.getMappingFunctions().entrySet().parallelStream().forEach(entry -> context.put(entry.getKey(), entry.getValue()));
-
+		Components.getMappingFunctions().entrySet().parallelStream().filter(f -> !f.getClass().equals(HF.class)).forEach(entry -> context.put(entry.getKey(), entry.getValue()));
 		// Load references
 		dataReferences.entrySet().parallelStream().forEach(entry -> context.put(entry.getKey(), entry.getValue()));
 		// Solve template
