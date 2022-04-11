@@ -3,7 +3,7 @@ package helio.jmapping;
 import java.util.Set;
 
 public class LinkMapping extends TripleMapping{
-	
+
 	private Datasource datasourceTarget;
 
 
@@ -21,8 +21,8 @@ public class LinkMapping extends TripleMapping{
 	public void setDatasourceTarget(Datasource datasourceTarget) {
 		this.datasourceTarget = datasourceTarget;
 	}
-	
-	
-	
+
+
+
 
 }

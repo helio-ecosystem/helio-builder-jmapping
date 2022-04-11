@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.jena.sparql.util.IsoAlg.Mapping;
 import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
@@ -24,11 +25,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 
-
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncompatibleMappingException;
 import helio.blueprints.exceptions.IncorrectMappingException;
-import helio.jmapping.*;
+import helio.jmapping.Datasource;
+import helio.jmapping.JMapping;
+import helio.jmapping.LinkRule;
+import helio.jmapping.TranslationRule;
+import helio.jmapping.TranslationRules;
 
 
 /**
@@ -95,7 +99,7 @@ public class RmlReader {
 
 	public JMapping readMapping(String content)  throws IncompatibleMappingException, IncorrectMappingException, ExtensionNotFoundException {
 		JMapping mapping = new JMapping();
-		
+
 		try(InputStream inputStream = new ByteArrayInputStream(content.getBytes())){
 			Model model = Rio.parse(inputStream, "https://helio-ecosystem.github.io/helio-reader-rml/", RDFFormat.TURTLE);
 			mapping = parseMapping(model);

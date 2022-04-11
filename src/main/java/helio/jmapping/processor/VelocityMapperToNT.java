@@ -10,7 +10,6 @@ import helio.jmapping.TranslationRule;
 import helio.jmapping.TranslationRules;
 
 class VelocityMapperToNT {
-	private static final String SUBJECT_VARIABLE = "$subject";
 	private static final String SUBJECT_VARIABLE_PREAMBLE = "#set( $subjectSet = \"";
 	private static final String PREDICATE_VARIABLE_PREAMBLE = "#set( $predicate";
 	private static final String OBJECT_VARIABLE_PREAMBLE = "#set( $object";
@@ -181,21 +180,6 @@ class VelocityMapperToNT {
 		str.append(head).append(string).append(tail);
 		return str.toString();
 	}
-	
-	/**
-	 * This method concatenates a set of strings efficiently in memory
-	 * @param str a set of {@link String} values
- 	 * @return a unique {@link String} concatenating all the input string values provided
-	 */
-	private static String concatenate(String ... str) {
-		StringBuilder builder = new StringBuilder();
-		for (String element : str) {
-			builder.append(element);
-		}
-		return builder.toString();
-	}
-	
-	private static String mapTranslationRulesId(String rulesId) {
-		return String.valueOf(rulesId.hashCode()).replace('-', '0');
-	}
+
+
 }

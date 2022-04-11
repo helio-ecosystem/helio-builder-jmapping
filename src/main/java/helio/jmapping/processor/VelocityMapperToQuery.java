@@ -181,7 +181,7 @@ class VelocityMapperToQuery {
 		str.append(head).append(string).append(tail);
 		return str.toString();
 	}
-	
+
 	/**
 	 * This method concatenates a set of strings efficiently in memory
 	 * @param str a set of {@link String} values
@@ -194,7 +194,7 @@ class VelocityMapperToQuery {
 		}
 		return builder.toString();
 	}
-	
+
 	private static String mapTranslationRulesId(String rulesId) {
 		return String.valueOf(rulesId.hashCode()).replace('-', '0');
 	}
