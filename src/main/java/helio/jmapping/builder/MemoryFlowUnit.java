@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -18,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.JsonObject;
 
 import helio.blueprints.AsyncDataProvider;
-import helio.blueprints.DataHandler;
 import helio.blueprints.DataProvider;
 import helio.blueprints.TranslationUnit;
 import helio.blueprints.UnitType;
+import helio.blueprints.exceptions.TranslationUnitExecutionException;
 import helio.jmapping.Datasource;
 import helio.jmapping.TripleMapping;
 import helio.providers.RdfHandler;
@@ -38,7 +36,10 @@ public class MemoryFlowUnit implements TranslationUnit {
 	private UnitType type;
 
 	private List<String> stream = new CopyOnWriteArrayList<String>();
+	private List<String> exceptions = new CopyOnWriteArrayList<String>();
 
+	
+	
 	public MemoryFlowUnit(TripleMapping mapping) {
 		this.datasource = mapping.getDatasource();
 
@@ -46,7 +47,9 @@ public class MemoryFlowUnit implements TranslationUnit {
 
 			if (datasource.getDataProvider() instanceof AsyncDataProvider) {
 				this.type = UnitType.Async;
-			} else {
+			} else if(datasource.getRefresh()!=null){
+				this.type = UnitType.Scheduled;
+			}else{
 				this.type = UnitType.Sync;
 			}
 
@@ -63,19 +66,25 @@ public class MemoryFlowUnit implements TranslationUnit {
 		
 	}
 
-	public List<String> getTranslations() {
+	public List<String> getDataTranslated() throws TranslationUnitExecutionException {
+		if(!exceptions.isEmpty()) {
+			String message = exceptions.get(0);
+			exceptions.clear();
+			throw new TranslationUnitExecutionException(message);
+		}
 		return stream;
 	}
 
-	public void flush() {
+	public void flushDataTranslated() throws TranslationUnitExecutionException {
 		stream.clear();
 	}
 
-	public Callable<Void> getTask() {
-		return new Callable<Void>() {
+	@Override
+	public Runnable getTask() throws TranslationUnitExecutionException {
+		return new Runnable() {
 			@Override
-			public Void call() throws Exception {
-				
+			public void run() {
+				try {
 					DataProvider provider = datasource.getDataProvider();
 					Flowable<String> source = Flowable.create(provider, BackpressureStrategy.BUFFER);
 					source.subscribe(data -> {
@@ -88,11 +97,13 @@ public class MemoryFlowUnit implements TranslationUnit {
 						}
 						
 					}, e -> {
-						System.out.println(e.toString());
+						exceptions.add(e.toString());
 					});
-				
-				return null;
+				}catch(Exception e) {
+					exceptions.add(e.toString());
+				}
 			}
+
 		};
 	}
 	
@@ -131,9 +142,7 @@ public class MemoryFlowUnit implements TranslationUnit {
 
 	// getters & setters
 
-	public Integer getScheduledTime() {
-		return datasource.getRefresh();
-	}
+	
 
 	public UnitType getUnitType() {
 		return type;
@@ -152,4 +161,20 @@ public class MemoryFlowUnit implements TranslationUnit {
 		// empty
 	}
 
+	@Override
+	public int getScheduledTime() {
+		return datasource.getRefresh();
+	}
+
+	@Override
+	public void setScheduledTime(int scheduledTime) {
+		this.datasource.setRefresh(scheduledTime);
+		type = UnitType.Scheduled;
+	}
+
+	
+
+
+
+	
 }

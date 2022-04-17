@@ -7,22 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.stream.Collectors;
-
-import org.apache.jena.atlas.io.InputStreamBuffered;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.sparql.resultset.ResultsFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,9 +23,6 @@ import helio.blueprints.UnitBuilder;
 import helio.blueprints.components.ComponentType;
 import helio.blueprints.components.Components;
 import helio.blueprints.exceptions.ExtensionNotFoundException;
-import helio.blueprints.exceptions.IncompatibleMappingException;
-import helio.blueprints.exceptions.IncorrectMappingException;
-import helio.blueprints.exceptions.TranslationUnitExecutionException;
 
 public class TestUtils {
 
@@ -49,27 +38,30 @@ public class TestUtils {
 		} catch (ExtensionNotFoundException e) {
 			e.printStackTrace();
 		}
+		try {
+			Components.registerAndLoad(
+					"https://github.com/helio-ecosystem/helio-handler-jayway/releases/download/v0.1.0/helio-handler-jayway-0.1.0.jar",
+					"handlers.JsonHandler", ComponentType.HANDLER);
+		} catch (ExtensionNotFoundException e) {
+			e.printStackTrace();
+		}
+	
+	
+
+		try {
+			Components.registerAndLoad(
+					"/Users/andreacimmino/Desktop/helio-provider-files-0.1.1.jar",
+					"helio.providers.files.FileProvider", ComponentType.PROVIDER);
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try {
 			Components.registerAndLoad(
-					"/Users/andreacimmino/Desktop/helio-handler-jayway-0.1.0.jar",
-					"handlers.JsonHandler", 
-					ComponentType.HANDLER);
-		} catch (ExtensionNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			Components.registerAndLoad(
 					null,
-					"helio.jmapping.functions.FileProvider", 
-					ComponentType.PROVIDER);
-		} catch (ExtensionNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			Components.registerAndLoad(
-					null,
-					"helio.jmapping.processor.JMappingProcessor", 
+					"helio.jmapping.builder.JMappingBuilder", 
 					ComponentType.BUILDER);
 		} catch (ExtensionNotFoundException e) {
 			e.printStackTrace();
@@ -109,7 +101,7 @@ public class TestUtils {
 	public static Set<TranslationUnit> processJMapping(String mappingFile) {
 		try {
 		String mappingContent = readFile(mappingFile);
-		UnitBuilder processor = Components.getMappingProcessors().get("JMappingProcessor");
+		UnitBuilder processor = Components.getMappingProcessors().get("JMappingBuilder");
 		return processor.parseMapping(mappingContent);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -127,14 +119,14 @@ public class TestUtils {
 					Future<?> f = scheduledExecutorService.submit(unit.getTask());
 					f.get();
 					
-					unit.getTranslations().forEach(fragment -> {
+					unit.getDataTranslated().forEach(fragment -> {
 						try {
 						model.read(new ByteArrayInputStream(fragment.getBytes()), null, "TURTLE");}
 						catch(Exception e) {
 							System.out.println(fragment);
 							};
 						});
-					unit.flush();
+					unit.flushDataTranslated();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

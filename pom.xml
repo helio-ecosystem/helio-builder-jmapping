@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.helio-ecosystem</groupId>
 	<artifactId>helio-processor-jmapping</artifactId>
-	<version>0.2.3</version>
+	<version>0.2.4</version>
 	<name>Helio Json Mapping Language</name>
 	<description>The deafult mapping language used by Helio</description>
 
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>io.github.helio-ecosystem</groupId>
 			<artifactId>helio-blueprints</artifactId>
-			<version>0.4.14</version>
+			<version>0.4.17</version>
 		</dependency>
 	
 		<!-- https://mvnrepository.com/artifact/org.javatuples/javatuples -->
