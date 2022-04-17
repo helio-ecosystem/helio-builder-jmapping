@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncorrectMappingException;
-import helio.jmapping.processor.JMappingProcessor;
+import helio.jmapping.builder.JMappingBuilder;
 
 /**
  * This class codifies a set of objects used to to generate RDF.<p>
@@ -152,7 +152,7 @@ public class JMapping  {
 
 
 	public String toJson() {
-		return JMappingProcessor.GSON.toJson(this);
+		return JMappingBuilder.GSON.toJson(this);
 	}
 
 
