@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -22,8 +23,8 @@ import helio.blueprints.DataProvider;
 import helio.blueprints.TranslationUnit;
 import helio.blueprints.UnitType;
 import helio.jmapping.Datasource;
-import helio.jmapping.RdfHandler;
 import helio.jmapping.TripleMapping;
+import helio.providers.RdfHandler;
 import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
 
@@ -45,8 +46,6 @@ public class MemoryFlowUnit implements TranslationUnit {
 
 			if (datasource.getDataProvider() instanceof AsyncDataProvider) {
 				this.type = UnitType.Async;
-			} else if (datasource.getRefresh() != null && datasource.getRefresh() > 0) {
-				this.type = UnitType.Scheduled;
 			} else {
 				this.type = UnitType.Sync;
 			}
@@ -72,10 +71,11 @@ public class MemoryFlowUnit implements TranslationUnit {
 		stream.clear();
 	}
 
-	public Runnable getTask() {
-		return new Runnable() {
-			public void run() {
-				try {
+	public Callable<Void> getTask() {
+		return new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				
 					DataProvider provider = datasource.getDataProvider();
 					Flowable<String> source = Flowable.create(provider, BackpressureStrategy.BUFFER);
 					source.subscribe(data -> {
@@ -90,10 +90,8 @@ public class MemoryFlowUnit implements TranslationUnit {
 					}, e -> {
 						System.out.println(e.toString());
 					});
-				} catch (Exception e) {
-
-				}
-
+				
+				return null;
 			}
 		};
 	}
@@ -149,10 +147,6 @@ public class MemoryFlowUnit implements TranslationUnit {
 		return id;
 	}
 
-	@Override
-	public void setScheduledTime(Integer ms) {
-		this.datasource.setRefresh(ms);
-	}
 
 	public void configure(JsonObject configuration) {
 		// empty
