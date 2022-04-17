@@ -1,4 +1,4 @@
-package helio.jmapping.processor;
+package helio.jmapping.builder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,9 +24,9 @@ import helio.jmapping.JMapping;
 import helio.jmapping.TranslationRules;
 import helio.jmapping.TripleMapping;
 
-public class JMappingProcessor implements UnitBuilder {
+public class JMappingBuilder implements UnitBuilder {
 	
-	public static Logger logger = LoggerFactory.getLogger(JMappingProcessor.class);
+	public static Logger logger = LoggerFactory.getLogger(JMappingBuilder.class);
 
 	public static final Gson GSON = new GsonBuilder()
 			  .excludeFieldsWithoutExposeAnnotation()

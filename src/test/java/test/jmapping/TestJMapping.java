@@ -18,8 +18,8 @@ import helio.blueprints.components.Components;
 import helio.blueprints.exceptions.ExtensionNotFoundException;
 import helio.blueprints.exceptions.IncompatibleMappingException;
 import helio.blueprints.exceptions.TranslationUnitExecutionException;
-import helio.jmapping.processor.JMappingProcessor;
-import helio.jmapping.processor.VelocityEvaluator;
+import helio.jmapping.builder.JMappingBuilder;
+import helio.jmapping.builder.VelocityEvaluator;
 
 public class TestJMapping {
 

@@ -1,4 +1,4 @@
-package helio.jmapping.processor;
+package helio.jmapping.builder;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
